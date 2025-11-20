@@ -21,11 +21,11 @@ app.get('/', (req, res) => {
     })
 })
 
-app.use('/observations', observationRoutes)
-app.use('/species', speciesRoutes)
-app.use('/auth', authRoutes)
-app.use('/admin', moderationRoutes)
-app.use('/expert', moderationRoutes)
+app.use('/api/observations', observationRoutes)
+app.use('/api/species', speciesRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/admin', moderationRoutes)
+app.use('/api/expert', moderationRoutes)
 
 async function startServer() {
     try {

@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use('/taxonomy', taxonomyRoutes);
+app.use('/api/taxonomy', taxonomyRoutes);
 
 async function startServer() {
     try {
