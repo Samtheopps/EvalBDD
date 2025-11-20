@@ -7,10 +7,11 @@ const {connectDB} = require('./config/database')
 const observationRoutes = require('./routes/observationRoutes')
 const speciesRoutes = require('./routes/speciesRoutes')
 const authRoutes = require('./routes/authRoutes')
+const moderationRoutes = require('./routes/moderationRoutes')
 
 const app = express()
 
-const PORT = process.env.PORT|| 3000
+const PORT = process.env.PORT|| 3001
 
 app.use(express.json())
 
@@ -20,9 +21,11 @@ app.get('/', (req, res) => {
     })
 })
 
-app.use('/api/observations', observationRoutes)
-app.use('/api/species', speciesRoutes)
-app.use('/api/auth', authRoutes)
+app.use('/observations', observationRoutes)
+app.use('/species', speciesRoutes)
+app.use('/auth', authRoutes)
+app.use('/admin', moderationRoutes)
+app.use('/expert', moderationRoutes)
 
 async function startServer() {
     try {
