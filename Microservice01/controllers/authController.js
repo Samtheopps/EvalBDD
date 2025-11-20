@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const { comparePassword, signToken } = require('../middlewares/authmiddlewares');
 
-// POST /auth/login
+
 async function login(req, res) {
   try {
     const { email, password } = req.body;
@@ -32,10 +32,8 @@ async function login(req, res) {
   }
 }
 
-// GET /auth/me
 async function me(req, res) {
   try {
-    // req.user est fixé par authenticateJWT middleware
     if (!req.user || !req.user.id) {
       return res.status(401).json({ success: false, message: 'Non authentifié' });
     }

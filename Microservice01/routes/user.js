@@ -2,22 +2,20 @@ const express = require('express')
 const router = express.Router()
 
 const {
-    createUser,
     getAllUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    changeUserRole
 } = require('../controllers/userController')
 
-const { hashPassword, authenticateJWT, authorizeRoles, adminOnly } = require('../middlewares/authmiddlewares')
+const {authenticateJWT, authorizeRoles, } = require('../middlewares/authmiddlewares')
 
-// Routes protégées
-router.get('/', authenticateJWT, authorizeRoles('ADMIN','EXPERT','USER'), getAllUser)
-router.get('/:id', authenticateJWT, authorizeRoles('ADMIN','EXPERT','USER'), getUserById)
+
+router.get('/', authenticateJWT, authorizeRoles('ADMIN'), getAllUser)
+router.get('/:id', authenticateJWT, authorizeRoles('ADMIN'), getUserById)
 router.put('/:id', authenticateJWT, authorizeRoles('ADMIN','EXPERT'), updateUser)
 router.delete('/:id', authenticateJWT, authorizeRoles('ADMIN'), deleteUser)
-
-// Exemple de route réservée admin
-router.get('/admin/list', authenticateJWT, adminOnly, getAllUser)
+router.patch('/:id', authenticateJWT, authorizeRoles('ADMIN'), changeUserRole)
 
 module.exports = router
