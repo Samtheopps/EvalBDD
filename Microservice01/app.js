@@ -1,6 +1,8 @@
 require('dotenv').config({ path: './.env' }); // .env dans le dossier courant
 require('dotenv').config({ path: '../.env' }); // .env à l'extérieur
 
+console.log('🚀 [DEBUG] Démarrage de Microservice01...');
+console.log('📁 [DEBUG] Variables d\'environnement chargées');
 
 const express = require('express')
 
@@ -30,13 +32,12 @@ async function startServer() {
         await connectDB()
 
         app.listen(PORT, () => {
-            console.log(`Le serveur a bien démarré au port ${PORT}, youpi, hourra.`)
+            console.log(`Le serveur a bien démarré au port ${PORT}`)
         })
     } catch (error) {
         console.error('Erreur au démarrage du serveur :', error);
         process.exit(1);
     }
 }
-
 
 startServer()

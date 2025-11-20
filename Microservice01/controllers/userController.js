@@ -3,12 +3,8 @@ const User = require('../models/user')
 
 
 const createUser = async (req,res)=>{
-    console.log('Début de la création d\'un utilisateur');
-    console.log('Données reçues dans req.body :', req.body);
-    const startTime = Date.now();
     try {
         const { email, username, password, role, reputation } = req.body;
-        console.log('Préparation du nouvel utilisateur avec :', { email, username, password, role, reputation });
         const user = new User({
             email,
             username,
@@ -16,30 +12,13 @@ const createUser = async (req,res)=>{
             role,
             reputation
         });
-        console.log('Instance User créée :', user);
-        // Validation mongoose
-        try {
-            await user.validate();
-            console.log('Validation mongoose OK');
-        } catch (validationError) {
-            console.error('Erreur de validation mongoose :', validationError);
-        }
         const userSauvegarde = await user.save();
-        console.log('Utilisateur sauvegardé en base :', userSauvegarde);
-        const endTime = Date.now();
-        console.log('Temps d\'exécution (ms) :', endTime - startTime);
-        // On retire le mot de passe de la réponse
-        const userObj = userSauvegarde.toObject();
-        delete userObj.password;
-        const response = {
+        res.status(201).json({
             succes: true,
             message: 'User a été crée avec succes',
-            data: userObj
-        };
-        console.log('Réponse envoyée au client :', response);
-        res.status(201).json(response);
+            data: userSauvegarde
+        });
     } catch (error) {
-        console.error('Erreur lors de la création de l\'utilisateur :', error);
         res.status(500).json({
             succes: false,
             message: "Erreur lors de la création de l'utilisateur",

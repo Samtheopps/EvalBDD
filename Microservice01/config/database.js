@@ -1,34 +1,31 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-async function connectDB(){
-    console.log('Début de la connexion à MongoDB...')
-    try{
-        const options = {
-            dbName: process.env.DB_NAME
+async function connectDB() {
+    try {
+        if (!process.env.MONGODB_URI) {
+            throw new Error("La variable d'environnement MONGODB_URI est manquante.");
         }
-        console.log('Options de connexion :', options)
-        console.log('URI MongoDB :', process.env.MONGODB_URI)
-        const conn = await mongoose.connect(process.env.MONGODB_URI, options)
-        console.log('Objet de connexion retourné :', conn)
-        console.log(`Mongo DB connectée : ${conn.connection.host}`)
-    }catch(error){
-        console.error('Erreur de connection à Mongodb :')
-        console.error('Stack :', error.stack)
-        console.error('Message :', error.message)
+
+        const options = {
+            dbName: process.env.DB_NAME || 'Aquaman'
+        };
+
+        const conn = await mongoose.connect(process.env.MONGODB_URI, options);
+        console.log(`MongoDB connecté : ${conn.connection.host}/${conn.connection.name}`);
+    } catch (error) {
+        console.error('Erreur de connexion à MongoDB :', error.message);
         process.exit(1);
     }
 }
 
-async function closeDB(){
-    console.log('Début de la fermeture de la connexion MongoDB...')
-    try{
+async function closeDB() {
+    try {
         await mongoose.connection.close();
-        console.log('connection coupé avec la db')
-    }catch(error){
-        console.error("erreur lors de la fermeture : ", error)
-        console.error('Stack :', error.stack)
-        console.error('Message :', error.message)
+        console.log('Connexion à la base de données fermée.');
+    } catch (error) {
+        console.error("Erreur lors de la fermeture de la connexion :", error.message);
+        process.exit(1);
     }
 }
 
-module.exports = {connectDB, closeDB}
+module.exports = { connectDB, closeDB };
