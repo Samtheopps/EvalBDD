@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middleware/authmiddleware')
+const role = require('../middleware/role')
 
 const {
     createObservation,
@@ -7,8 +9,8 @@ const {
     rejectObservation,
 } = require('../controllers/observationController')
 
-router.post('/',createObservation)
-router.post('/:id/validate', validateObservation)
-router.post('/:id/reject', rejectObservation)
+router.post('/', auth, createObservation)
+router.post('/:id/validate', auth,  role('EXPERT', 'ADMIN'), validateObservation)
+router.post('/:id/reject', auth, role('EXPERT', 'ADMIN'), rejectObservation)
 
 module.exports = router
