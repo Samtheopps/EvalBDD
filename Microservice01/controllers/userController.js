@@ -169,57 +169,6 @@ const changeUserRole = async (req, res) => {
     }
 }
 
-// POST /users/:id/reputation - Ajouter ou retirer de la réputation
-const addReputation = async (req, res) => {
-    const { id } = req.params;
-    const { points, reason } = req.body;
-    try {
-        if (!points || typeof points !== 'number') {
-            return res.status(400).json({
-                success: false,
-                message: 'Points invalides. Doit être un nombre.'
-            });
-        }
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "Utilisateur non trouvé"
-            });
-        }
-
-        // Calculer la nouvelle réputation
-        const newReputation = (user.reputation || 0) + points;
-        const clampedReputation = Math.max(0, Math.min(5, newReputation));
-
-        user.reputation = clampedReputation;
-
-        // Vérifier si l'utilisateur doit devenir EXPERT (réputation >= 10)
-        // Note: La réputation est limitée entre 0 et 5, donc cette logique peut être ajustée
-        if (clampedReputation >= 10 && user.role === 'USER') {
-            user.role = 'EXPERT';
-        }
-
-        await user.save();
-
-        const userObj = user.toObject();
-        delete userObj.password;
-
-        res.status(200).json({
-            success: true,
-            message: `Réputation ${points > 0 ? 'ajoutée' : 'retirée'} avec succès (Raison: ${reason || 'N/A'})`,
-            data: userObj
-        });
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout de réputation :', error);
-        res.status(500).json({
-            success: false,
-            message: "Erreur lors de l'ajout de réputation",
-            error: error.message
-        });
-    }
-}
-
 
 module.exports = {
     createUser,
@@ -227,6 +176,5 @@ module.exports = {
     getUserById,
     updateUser,
     deleteUser,
-    changeUserRole,
-    addReputation
+    changeUserRole
 }

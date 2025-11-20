@@ -1,17 +1,12 @@
 const Observation = require('../models/Observation');
 
-/**
- * Calcule le rarityScore d'une espèce
- * Formule : rarityScore = 1 + (nombreObservationsValidées / 5)
- * @param {String} speciesId - ID de l'espèce
- */
+// Calcule le rarityScore d'une espèce
 exports.calculateRarityScore = async (speciesId) => {
     try {
         const validatedCount = await Observation.countDocuments({
             speciesId,
             status: 'validated'
         });
-
         const rarityScore = 1 + (validatedCount / 5);
         return parseFloat(rarityScore.toFixed(2));
     } catch (err) {
@@ -20,10 +15,7 @@ exports.calculateRarityScore = async (speciesId) => {
     }
 };
 
-/**
- * Met à jour le rarityScore d'une espèce
- * @param {Object} species - Objet espèce
- */
+// Met à jour le rarityScore d'une espèce
 exports.updateRarityScore = async (species) => {
     try {
         const rarityScore = await exports.calculateRarityScore(species._id);
@@ -35,4 +27,3 @@ exports.updateRarityScore = async (species) => {
         throw err;
     }
 };
-

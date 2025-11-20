@@ -1,20 +1,18 @@
+// Microservice02/services/reputationService.js
 const axios = require('axios');
 
 const MICROSERVICE1_URL = process.env.MICROSERVICE1_URL || 'http://localhost:3000';
 
-/**
- * Ajoute de la réputation à un utilisateur
- * @param {String} userId - ID de l'utilisateur
- * @param {Number} points - Points à ajouter (positif ou négatif)
- * @param {String} reason - Raison de l'ajout
- */
-exports.addReputation = async (userId, points, reason) => {
+exports.addReputation = async (userId, points, reason, jwt) => {
     try {
         const response = await axios.post(
             `${MICROSERVICE1_URL}/api/users/${userId}/reputation`,
             { points, reason },
             {
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                }
             }
         );
         return response.data;
@@ -24,16 +22,15 @@ exports.addReputation = async (userId, points, reason) => {
     }
 };
 
-/**
- * Récupère la réputation d'un utilisateur
- * @param {String} userId - ID de l'utilisateur
- */
-exports.getReputation = async (userId) => {
+exports.getReputation = async (userId, jwt) => {
     try {
         const response = await axios.get(
-            `${MICROSERVICE1_URL}/api/users/${userId}`,
+            `${MICROSERVICE1_URL}/api/users/${userId}/reputation`,
             {
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                }
             }
         );
         return response.data.reputation || 0;
@@ -42,4 +39,3 @@ exports.getReputation = async (userId) => {
         return 0;
     }
 };
-

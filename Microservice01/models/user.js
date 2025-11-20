@@ -25,8 +25,7 @@ const userSchema = mongoose.Schema({
         },
         reputation: {
             type: Number,
-            min: [0, "une réputaion ne peut pas être négatif"],
-            max: [5, "une réputaion ne peut pas dépasser 5"]
+            min: [0, "une réputaion ne peut pas être négatif"]
         }
     },
     {
