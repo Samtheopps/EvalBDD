@@ -4,12 +4,11 @@ const User = require('../models/user')
 
 const createUser = async (req,res)=>{
     try {
-        const { email, username, password, role, reputation } = req.body;
+        const { email, username, password, reputation } = req.body;
         const user = new User({
             email,
             username,
             password,
-            role,
             reputation
         });
         const userSauvegarde = await user.save();

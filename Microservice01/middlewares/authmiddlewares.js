@@ -37,7 +37,7 @@ function authenticateJWT(req, res, next) {
   const token = parts[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // attendu: { id, role, iat, exp }
+    req.user = decoded;
     return next();
   } catch (err) {
     return res.status(401).json({ message: 'Token invalide ou expiré' });
@@ -59,13 +59,10 @@ function authorizeRoles(...allowedRoles) {
 }
 
 
-const adminOnly = authorizeRoles('ADMIN');
-
 module.exports = {
   hashPassword,
   comparePassword,
   signToken,
   authenticateJWT,
   authorizeRoles,
-  adminOnly,
 };
