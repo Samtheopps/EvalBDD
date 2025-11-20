@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 
 async function connectDB(){
     try{
-        const options = {}
+        const options = {
+            dbName: process.env.DB_NAME
+        }
 
         const conn = await mongoose.connect(process.env.MONGODB_URI, options)
 
