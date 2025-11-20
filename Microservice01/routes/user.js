@@ -11,9 +11,6 @@ const {
 
 const { hashPassword, authenticateJWT, authorizeRoles, adminOnly } = require('../middlewares/authmiddlewares')
 
-// Routes publiques / inscription
-router.post('/', hashPassword, createUser)
-
 // Routes protégées
 router.get('/', authenticateJWT, authorizeRoles('ADMIN','EXPERT','USER'), getAllUser)
 router.get('/:id', authenticateJWT, authorizeRoles('ADMIN','EXPERT','USER'), getUserById)
