@@ -1,5 +1,6 @@
 const Observation = require('../models/Observation');
 const Species = require('../models/Species');
+const History = require('../models/History');
 const reputationService = require('../services/reputationService');
 const rarityService = require('../services/rarityService');
 
@@ -33,6 +34,17 @@ exports.createObservation = async (req, res) => {
             validatedAt: null
         });
         await obs.save();
+
+        // Historisation
+        await History.create({
+            targetType: 'observation',
+            targetId: obs._id,
+            action: 'created',
+            performedBy: authorId,
+            performedByRole: req.user.role,
+            details: 'Observation créée'
+        });
+
         res.status(201).json(obs);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -43,7 +55,10 @@ exports.createObservation = async (req, res) => {
 // Lister les observations d'une espèce
 exports.getObservationsBySpecies = async (req, res) => {
     try {
-        const observations = await Observation.find({ speciesId: req.params.id });
+        const observations = await Observation.find({
+            speciesId: req.params.id,
+            deletedAt: null
+        });
         res.json(observations);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -95,6 +110,17 @@ exports.validateObservation = async (req, res) => {
         obs.validatedBy = req.user.id;
         obs.validatedAt = new Date();
         await obs.save();
+
+        // Historisation
+        await History.create({
+            targetType: 'observation',
+            targetId: obs._id,
+            action: 'validated',
+            performedBy: req.user.id,
+            performedByRole: req.user.role,
+            details: `Observation validée par ${req.user.role}`
+        });
+
         res.json(obs);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -120,6 +146,17 @@ exports.rejectObservation = async (req, res) => {
         obs.validatedBy = req.user.id;
         obs.validatedAt = new Date();
         await obs.save();
+
+        // Historisation
+        await History.create({
+            targetType: 'observation',
+            targetId: obs._id,
+            action: 'rejected',
+            performedBy: req.user.id,
+            performedByRole: req.user.role,
+            details: `Observation rejetée par ${req.user.role}`
+        });
+
         // Retire de la réputation à l'auteur
         try {
             const authHeader = req.headers.authorization;
