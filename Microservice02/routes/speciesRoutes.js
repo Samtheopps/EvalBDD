@@ -5,10 +5,12 @@ const auth = require('../middleware/authmiddleware')
 const {
     getAllSpecies,
     getSpeciesById,
-    createSpecies
+    createSpecies,
+    getSpeciesByRarity
 } = require('../controllers/speciesController')
 
 router.get('/', auth, getAllSpecies)
+router.get('/rarity/sorted', auth, getSpeciesByRarity)
 router.get('/:id', auth, getSpeciesById)
 router.post('/', auth, createSpecies)
 

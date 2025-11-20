@@ -10,11 +10,15 @@ const speciesSchema = mongoose.Schema({
         required: [true, "Le nom de l'espèce est obligatoire"],
         trim: true,
     },
+    rarityScore: {
+        type: Number,
+        default: 1,
+        min: 1
+    },
     createdAt: {
         type: Date,
         default: Date.now,
     }
-
 });
 
 const Species = mongoose.model('Species', speciesSchema);

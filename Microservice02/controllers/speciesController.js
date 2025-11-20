@@ -42,3 +42,14 @@ exports.getAllSpecies = async (req, res) => {
     }
 };
 
+// GET /species/rarity/sorted - Trier par rareté (décroissant)
+exports.getSpeciesByRarity = async (req, res) => {
+    try {
+        const species = await Species.find().sort({ rarityScore: -1 });
+        res.json(species);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
