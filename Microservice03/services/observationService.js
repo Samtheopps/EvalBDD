@@ -5,7 +5,7 @@ const MICROSERVICE2_URL = process.env.MICROSERVICE2_URL || 'http://localhost:300
 // Récupère toutes les espèces
 exports.getAllSpecies = async (jwt) => {
     try {
-        const response = await axios.get(`${MICROSERVICE2_URL}/species`, {
+        const response = await axios.get(`${MICROSERVICE2_URL}/api/species`, {
             headers: { Authorization: `Bearer ${jwt}` }
         });
         return response.data;
@@ -18,7 +18,7 @@ exports.getAllSpecies = async (jwt) => {
 // Récupère toutes les observations d'une espèce
 exports.getObservationsBySpecies = async (speciesId, jwt) => {
     try {
-        const response = await axios.get(`${MICROSERVICE2_URL}/species/${speciesId}/observations`, {
+        const response = await axios.get(`${MICROSERVICE2_URL}/api/species/${speciesId}/observations`, {
             headers: { Authorization: `Bearer ${jwt}` }
         });
         return response.data;

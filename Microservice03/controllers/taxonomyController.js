@@ -49,7 +49,6 @@ exports.getTaxonomyStats = async (req, res) => {
         if (!jwt) {
             return res.status(401).json({ message: 'JWT requis' });
         }
-
         // Récupère toutes les espèces
         const species = await observationService.getAllSpecies(jwt);
 
@@ -76,8 +75,11 @@ exports.getTaxonomyStats = async (req, res) => {
             })
         );
 
+
         // Calcul des statistiques
         const totalObservations = speciesWithObs.reduce((sum, sp) => sum + sp.observationCount, 0);
+
+        console.log(totalObservations);
         const averageObservations = totalObservations / species.length;
 
         // Extraction des mots-clés
