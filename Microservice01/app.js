@@ -1,8 +1,6 @@
 require('dotenv').config({ path: './.env' }); // .env dans le dossier courant
 require('dotenv').config({ path: '../.env' }); // .env à l'extérieur
 
-console.log('🚀 [DEBUG] Démarrage de Microservice01...');
-console.log('📁 [DEBUG] Variables d\'environnement chargées');
 
 const express = require('express')
 
