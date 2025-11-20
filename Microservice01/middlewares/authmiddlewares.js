@@ -5,9 +5,7 @@ const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
 const JWT_EXPIRES_IN = '7d';
 
-/**
- * Hache le mot de passe présent dans req.body.password (middleware pour route POST /api/users)
- */
+
 async function hashPassword(req, res, next) {
   try {
     if (req.body && req.body.password) {
@@ -20,25 +18,16 @@ async function hashPassword(req, res, next) {
   }
 }
 
-/**
- * Compare un mot de passe en clair avec un hash
- */
 async function comparePassword(plain, hash) {
   return bcrypt.compare(plain, hash);
 }
 
-/**
- * Génère un JWT contenant l'id et le rôle (utiliser au login)
- * payload minimal : { id, role }
- */
+
 function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
 
-/**
- * Vérifie le JWT envoyé dans l'en-tête Authorization: Bearer <token>
- * Attache l'objet décodé sur req.user
- */
+
 function authenticateJWT(req, res, next) {
   const auth = req.headers.authorization || '';
   const parts = auth.split(' ');
@@ -55,10 +44,7 @@ function authenticateJWT(req, res, next) {
   }
 }
 
-/**
- * Fabrique un middleware d'autorisation par rôle.
- * Usage: app.get('/admin/users', authenticateJWT, authorizeRoles('ADMIN'), handler)
- */
+
 function authorizeRoles(...allowedRoles) {
   return (req, res, next) => {
     const role = req.user && req.user.role;
@@ -72,9 +58,7 @@ function authorizeRoles(...allowedRoles) {
   };
 }
 
-/**
- * Middleware dédié aux routes ADMIN
- */
+
 const adminOnly = authorizeRoles('ADMIN');
 
 module.exports = {

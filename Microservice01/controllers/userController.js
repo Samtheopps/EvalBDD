@@ -132,6 +132,43 @@ const deleteUser = async(req,res) =>{
                 }
 
 }
+const changeUserRole = async (req, res) => {
+    const { id } = req.params;
+    const { role } = req.body;
+    try {
+        if (!role || !['USER','EXPERT','ADMIN'].includes(role)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Rôle fourni non valide. Valeurs acceptées : USER, EXPERT, ADMIN.'
+            });
+        }
+        const user = await User.findByIdAndUpdate(
+            id,
+            { role },
+            { new: true, runValidators: true }
+        );
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Utilisateur non trouvé"
+            });
+        }
+        const userObj = user.toObject();
+        delete userObj.password;
+        res.status(200).json({
+            success: true,
+            message: 'Rôle modifié avec succès',
+            data: userObj
+        });
+    } catch (error) {
+        console.error('Erreur lors de la modification du rôle :', error);
+        res.status(500).json({
+            success: false,
+            message: "Erreur lors de la modification du rôle de l'utilisateur",
+            error: error.message
+        });
+    }
+}
 
 
 module.exports = {
@@ -139,5 +176,6 @@ module.exports = {
     getAllUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    changeUserRole
 }
