@@ -7,12 +7,14 @@ const express = require('express')
 const {connectDB,closeDB} = require('./config/database')
 
 const userRoutes = require('./routes/user')
+const authRoutes = require('./routes/auth')
 
 const app = express()
 
 const PORT = process.env.PORT|| 3000
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
     res.json({
@@ -20,6 +22,7 @@ app.get('/', (req, res) => {
     })
 })
 
+app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 
 async function startServer() {

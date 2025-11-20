@@ -19,7 +19,8 @@ const userSchema = mongoose.Schema({
         },
         role: {
             type: String,
-            required: [true, "role est vide ?"]
+            required: [true, "role est vide ?"],
+            enum:['ADMIN','EXPERT','USER']
         },
         reputation: {
             type: Number,
