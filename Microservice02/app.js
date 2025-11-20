@@ -6,6 +6,7 @@ const express = require('express')
 const {connectDB} = require('./config/database')
 const observationRoutes = require('./routes/observationRoutes')
 const speciesRoutes = require('./routes/speciesRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/observations', observationRoutes)
 app.use('/api/species', speciesRoutes)
+app.use('/api/auth', authRoutes)
 
 async function startServer() {
     try {
