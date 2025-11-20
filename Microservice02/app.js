@@ -3,10 +3,9 @@ require('dotenv').config({ path: '../.env' }); // .env à l'extérieur
 
 
 const express = require('express')
-
-const {connectDB,closeDB} = require('./config/database')
-
-const userRoutes = require('./routes/user')
+const {connectDB} = require('./config/database')
+const observationRoutes = require('./routes/observationRoutes')
+const speciesRoutes = require('./routes/speciesRoutes')
 
 const app = express()
 
@@ -20,14 +19,15 @@ app.get('/', (req, res) => {
     })
 })
 
-app.use('/api/users', userRoutes)
+app.use('/api/observations', observationRoutes)
+app.use('/api/species', speciesRoutes)
 
 async function startServer() {
     try {
         await connectDB()
 
         app.listen(PORT, () => {
-            console.log(`Le serveur a bien démarré au port ${PORT}, youpi, hourra.`)
+            console.log(`Le serveur a bien démarré au port localhost:${PORT}, youpi, hourra.`)
         })
     } catch (error) {
         console.error('Erreur au démarrage du serveur :', error);
