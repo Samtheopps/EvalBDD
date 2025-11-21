@@ -2,9 +2,10 @@
 const axios = require('axios');
 
 const MICROSERVICE1_URL = process.env.MICROSERVICE1_URL || 'http://localhost:3000';
-
+console.log('MICROSERVICE1_URL:', MICROSERVICE1_URL);
 exports.addReputation = async (userId, points, reason, jwt) => {
     try {
+        console.log(`${MICROSERVICE1_URL}/api/users/${userId}/reputation`);
         const response = await axios.post(
             `${MICROSERVICE1_URL}/api/users/${userId}/reputation`,
             { points, reason },
